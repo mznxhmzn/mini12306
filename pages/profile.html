@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mini-12306 个人中心">
+  <title>我的 - Mini-12306</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="app-shell business-shell">
+    <!-- 用户资料摘要 -->
+    <header class="profile-hero">
+      <div class="profile-user">
+        <div id="profile-avatar" class="profile-avatar" aria-hidden="true">旅</div>
+        <div class="profile-copy">
+          <h1 id="profile-name">旅客用户</h1>
+          <p id="profile-phone">已实名认证</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="profile-content">
+      <!-- 出行数据 -->
+      <section class="section-card profile-summary" aria-label="出行数据">
+        <div><strong id="profile-upcoming-count">0</strong><span>待出行</span></div>
+        <div><strong id="profile-order-count">0</strong><span>全部订单</span></div>
+        <div><strong id="profile-passenger-count">0</strong><span>常用乘车人</span></div>
+      </section>
+
+      <!-- 账号相关功能 -->
+      <section class="section-card menu-list" aria-label="账号功能">
+        <a class="menu-item" href="#personal-info"><span class="menu-icon">资</span><strong>个人资料</strong><small>已实名</small><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#passengers"><span class="menu-icon">乘</span><strong>常用乘车人</strong><small>1 人</small><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#payment-method"><span class="menu-icon">卡</span><strong>支付方式</strong><small id="profile-payment-method">未绑定</small><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#account-security"><span class="menu-icon">安</span><strong>账号安全</strong><span class="menu-arrow">›</span></a>
+      </section>
+
+      <!-- 服务与设置 -->
+      <section class="section-card menu-list" aria-label="服务与设置">
+        <a class="menu-item" href="orders.html"><span class="menu-icon">单</span><strong>我的订单</strong><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#notice"><span class="menu-icon">讯</span><strong>消息通知</strong><small>已开启</small><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#settings"><span class="menu-icon">设</span><strong>系统设置</strong><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#help"><span class="menu-icon">助</span><strong>帮助与反馈</strong><span class="menu-arrow">›</span></a>
+        <a class="menu-item" href="#about"><span class="menu-icon">关</span><strong>关于 Mini-12306</strong><small>演示版</small><span class="menu-arrow">›</span></a>
+      </section>
+
+      <div class="notice-box"><span class="notice-mark">!</span><span>当前显示的用户、证件和银行卡信息均为虚构或脱敏演示数据。</span></div>
+      <a class="danger-button" href="login.html" data-action="logout">退出登录</a>
+    </main>
+
+    <!-- 公共底部导航：我的高亮 -->
+    <nav class="tab-bar" aria-label="主要导航">
+      <a class="tab-item" href="../index.html"><span class="nav-text-icon" aria-hidden="true">首</span><span>首页</span></a>
+      <a class="tab-item" href="orders.html"><span class="nav-text-icon" aria-hidden="true">单</span><span>订单</span></a>
+      <a class="tab-item is-active" href="profile.html" aria-current="page"><span class="nav-text-icon" aria-hidden="true">我</span><span>我的</span></a>
+    </nav>
+  </div>
+
+  <!-- 初始化数据并检查登录状态 -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/protected-page.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

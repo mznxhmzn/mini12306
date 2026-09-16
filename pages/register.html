@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="注册 Mini-12306 账号">
+  <title>注册账号 - Mini-12306</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="app-shell public-shell">
+    <!-- 注册页标题 -->
+    <header class="subpage-header">
+      <a class="header-action" href="login.html" aria-label="返回登录页">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+      </a>
+      <h1>注册账号</h1>
+      <span></span>
+    </header>
+
+    <main class="subpage-content">
+      <section class="register-intro">
+        <h2>欢迎加入 Mini-12306</h2>
+        <p>当前为本地演示版本，请使用虚构身份信息完成注册体验。</p>
+      </section>
+
+      <!-- 实名注册表单 -->
+      <form class="section-card form-stack" action="login.html" method="get">
+        <div class="form-group">
+          <label class="form-label" for="register-name">真实姓名<span class="required-mark">*</span></label>
+          <input id="register-name" class="form-control" name="realName" type="text" placeholder="请输入姓名" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-id-type">证件类型<span class="required-mark">*</span></label>
+          <select id="register-id-type" class="select-control" name="idType">
+            <option>居民身份证</option>
+            <option>护照</option>
+            <option>港澳居民居住证</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-id-number">证件号码<span class="required-mark">*</span></label>
+          <input id="register-id-number" class="form-control" name="idNumber" type="text" placeholder="请输入虚构证件号码" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-phone">手机号<span class="required-mark">*</span></label>
+          <input id="register-phone" class="form-control" name="phone" type="tel" inputmode="numeric" maxlength="11" placeholder="请输入11位手机号" autocomplete="tel" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-code">短信验证码<span class="required-mark">*</span></label>
+          <div class="input-with-button">
+            <input id="register-code" class="form-control" name="code" type="text" inputmode="numeric" maxlength="6" placeholder="6位验证码" required>
+            <button class="secondary-button" type="button">获取验证码</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-password">设置密码<span class="required-mark">*</span></label>
+          <input id="register-password" class="form-control" name="password" type="password" minlength="6" placeholder="至少6位字符" autocomplete="new-password" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-confirm-password">确认密码<span class="required-mark">*</span></label>
+          <input id="register-confirm-password" class="form-control" name="confirmPassword" type="password" minlength="6" placeholder="请再次输入密码" autocomplete="new-password" required>
+        </div>
+
+        <label class="agreement-row">
+          <input type="checkbox" required>
+          <span>我已阅读并同意<a href="#service">《服务协议》</a>和<a href="#privacy">《隐私政策》</a></span>
+        </label>
+
+        <button class="primary-button page-submit" type="submit">完成注册</button>
+      </form>
+    </main>
+
+  </div>
+</body>
+</html>

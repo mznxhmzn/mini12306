@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="查看 Mini-12306 订单">
+  <title>我的订单 - Mini-12306</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="app-shell business-shell">
+    <header class="subpage-header">
+      <a class="header-action" href="../index.html" aria-label="返回首页">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+      </a>
+      <h1>我的订单</h1>
+      <button class="header-action" type="button">搜索</button>
+    </header>
+
+    <!-- 订单状态筛选 -->
+    <nav class="order-filter" aria-label="订单状态筛选">
+      <button class="order-filter-button is-active" type="button" data-filter="all">全部</button>
+      <button class="order-filter-button" type="button" data-filter="pending">待支付</button>
+      <button class="order-filter-button" type="button" data-filter="paid">已支付</button>
+      <button class="order-filter-button" type="button" data-filter="refunded">已退票</button>
+      <button class="order-filter-button" type="button" data-filter="changed">已改签</button>
+    </nav>
+
+    <main id="order-list" class="subpage-content">
+      <!-- 已支付订单 -->
+      <article class="section-card order-card">
+        <header class="order-card-head"><span class="order-number">订单 E202609120001</span><span class="status-label status-paid">已支付</span></header>
+        <div class="order-route">
+          <div class="order-route-station"><strong>07:38</strong><span>武汉站</span></div>
+          <div class="order-train-number">G66<br>→</div>
+          <div class="order-route-station"><strong>11:30</strong><span>北京南站</span></div>
+        </div>
+        <div class="order-card-meta"><span>09月12日　张*明</span><strong>二等座　¥520.50</strong></div>
+        <footer class="order-actions">
+          <a class="small-button" href="refund.html">退票</a>
+          <a class="small-button primary" href="reschedule.html">改签</a>
+        </footer>
+      </article>
+
+      <!-- 待支付订单 -->
+      <article class="section-card order-card">
+        <header class="order-card-head"><span class="order-number">订单 E202609120002</span><span class="status-label status-pending">待支付</span></header>
+        <div class="order-route">
+          <div class="order-route-station"><strong>08:00</strong><span>武汉站</span></div>
+          <div class="order-train-number">G1722<br>→</div>
+          <div class="order-route-station"><strong>12:03</strong><span>上海虹桥</span></div>
+        </div>
+        <div class="order-card-meta"><span>09月13日　张*明</span><strong>二等座　¥336.00</strong></div>
+        <footer class="order-actions"><button class="small-button" type="button">取消订单</button><a class="small-button primary" href="payment.html">继续支付</a></footer>
+      </article>
+
+      <!-- 已改签订单 -->
+      <article class="section-card order-card">
+        <header class="order-card-head"><span class="order-number">订单 E202609080006</span><span class="status-label status-changed">已改签</span></header>
+        <div class="order-route">
+          <div class="order-route-station"><strong>17:15</strong><span>武汉站</span></div>
+          <div class="order-train-number">G2035<br>→</div>
+          <div class="order-route-station"><strong>21:42</strong><span>广州南站</span></div>
+        </div>
+        <div class="order-card-meta"><span>09月15日　张*明</span><strong>二等座　¥463.50</strong></div>
+        <footer class="order-actions"><button class="small-button" type="button">查看详情</button></footer>
+      </article>
+
+      <!-- 已退票订单 -->
+      <article class="section-card order-card">
+        <header class="order-card-head"><span class="order-number">订单 E202609050003</span><span class="status-label status-refunded">已退票</span></header>
+        <div class="order-route">
+          <div class="order-route-station"><strong>21:58</strong><span>武汉站</span></div>
+          <div class="order-train-number">Z25<br>→</div>
+          <div class="order-route-station"><strong>08:10</strong><span>上海虹桥</span></div>
+        </div>
+        <div class="order-card-meta"><span>09月10日　张*明</span><strong>硬座　¥128.50</strong></div>
+      </article>
+    </main>
+
+    <!-- 公共底部导航：订单高亮 -->
+    <nav class="tab-bar" aria-label="主要导航">
+      <a class="tab-item" href="../index.html"><span class="nav-text-icon" aria-hidden="true">首</span><span>首页</span></a>
+      <a class="tab-item is-active" href="orders.html" aria-current="page"><span class="nav-text-icon" aria-hidden="true">单</span><span>订单</span></a>
+      <a class="tab-item" href="profile.html"><span class="nav-text-icon" aria-hidden="true">我</span><span>我的</span></a>
+    </nav>
+  </div>
+
+  <!-- 初始化数据并检查登录状态 -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/protected-page.js"></script>
+  <script src="../js/orders.js"></script>
+</body>
+</html>

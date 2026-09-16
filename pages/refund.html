@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mini-12306 退票确认">
+  <title>申请退票 - Mini-12306</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="app-shell business-shell">
+    <header class="subpage-header">
+      <a class="header-action" href="orders.html" aria-label="返回我的订单">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+      </a>
+      <h1>申请退票</h1>
+      <span></span>
+    </header>
+
+    <main class="subpage-content">
+      <!-- 待退车票 -->
+      <section class="section-card journey-card" aria-labelledby="refund-train-title">
+        <div class="journey-card-top"><strong id="refund-train-title">G66 高速动车</strong><span>已支付</span></div>
+        <div class="journey-route">
+          <div class="journey-station"><strong class="journey-time">07:38</strong><p>武汉站</p></div>
+          <div class="journey-direction"><span class="journey-line"></span><small>3小时52分</small></div>
+          <div class="journey-station"><strong class="journey-time">11:30</strong><p>北京南站</p></div>
+        </div>
+        <div class="journey-detail"><span>09月12日</span><span data-current-user-name>旅客用户</span><span>二等座</span></div>
+      </section>
+
+      <div class="notice-box"><span class="notice-mark">!</span><span>提交后当前车票将失效，对应座席会被释放。请确认行程已经取消。</span></div>
+
+      <!-- 退款金额 -->
+      <section class="section-card" aria-labelledby="refund-price-title">
+        <div class="section-heading"><h2 id="refund-price-title">退款明细</h2></div>
+        <div class="price-list">
+          <div class="price-row"><span>原票款</span><strong>¥520.50</strong></div>
+          <div class="price-row"><span>退票手续费（5%）</span><strong>-¥26.03</strong></div>
+          <div class="price-row price-total"><span>预计退款</span><strong>¥494.47</strong></div>
+        </div>
+        <p class="muted-text">模拟退款将原路退回演示支付账户，预计即时到账。</p>
+      </section>
+
+      <!-- 退票原因 -->
+      <section class="section-card form-stack" aria-labelledby="refund-reason-title">
+        <h2 id="refund-reason-title">退票原因</h2>
+        <select class="select-control" aria-label="选择退票原因">
+          <option>行程有变</option>
+          <option>购买错误</option>
+          <option>改乘其他交通工具</option>
+          <option>其他原因</option>
+        </select>
+        <label class="checkbox-row"><input type="checkbox"><span>我已阅读退票规则并确认退款金额</span></label>
+      </section>
+
+      <button class="primary-button page-submit" type="button">确认退票</button>
+    </main>
+
+    <!-- 公共底部导航：订单高亮 -->
+    <nav class="tab-bar" aria-label="主要导航">
+      <a class="tab-item" href="../index.html"><span class="nav-text-icon" aria-hidden="true">首</span><span>首页</span></a>
+      <a class="tab-item is-active" href="orders.html" aria-current="page"><span class="nav-text-icon" aria-hidden="true">单</span><span>订单</span></a>
+      <a class="tab-item" href="profile.html"><span class="nav-text-icon" aria-hidden="true">我</span><span>我的</span></a>
+    </nav>
+  </div>
+
+  <!-- 初始化数据并检查登录状态 -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/protected-page.js"></script>
+</body>
+</html>

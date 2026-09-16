@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mini-12306 车次查询结果">
+  <title>车次列表 - Mini-12306</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body>
+  <div class="app-shell train-list-shell">
+    <!-- 顶部查询条件摘要 -->
+    <header class="list-header">
+      <div class="list-title-row">
+        <a class="back-button" href="../index.html" aria-label="返回购票查询首页">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </a>
+        <h1>车次列表</h1>
+        <span class="title-placeholder" aria-hidden="true"></span>
+      </div>
+
+      <div class="query-summary" aria-label="当前查询条件">
+        <div class="summary-route">
+          <strong id="summary-departure">--</strong>
+          <span class="summary-arrow" aria-hidden="true">
+            <span></span>
+          </span>
+          <strong id="summary-arrival">--</strong>
+        </div>
+        <div class="summary-meta">
+          <span id="summary-date">请选择日期</span>
+          <span id="student-badge" class="student-badge" hidden>学生票</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="train-list-content">
+      <!-- 筛选和排序工具栏 -->
+      <section class="filter-panel" aria-label="筛选和排序">
+        <div class="filter-tabs" role="group" aria-label="车次类型">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="filter-button" type="button" data-filter="high-speed" aria-pressed="false">高铁动车</button>
+          <button class="filter-button" type="button" data-filter="normal" aria-pressed="false">普通列车</button>
+        </div>
+
+        <label class="sort-field" for="train-sort">
+          <span>排序</span>
+          <select id="train-sort" aria-label="车次排序方式">
+            <option value="departure">出发时间早→晚</option>
+            <option value="duration">历时最短</option>
+            <option value="price">票价最低</option>
+          </select>
+        </label>
+      </section>
+
+      <div class="result-overview">
+        <p id="result-count" aria-live="polite">正在加载车次…</p>
+        <div class="availability-legend" aria-label="余票状态说明">
+          <span><i class="legend-dot sufficient"></i>充足</span>
+          <span><i class="legend-dot limited"></i>紧张</span>
+          <span><i class="legend-dot unavailable"></i>无票</span>
+        </div>
+      </div>
+
+      <!-- JavaScript 会将车次卡片渲染到此处 -->
+      <section id="train-list" class="train-list" aria-label="车次查询结果"></section>
+    </main>
+
+    <!-- 公共底部导航 -->
+    <nav class="tab-bar" aria-label="主要导航">
+      <a class="tab-item is-active" href="../index.html" aria-current="page"><span class="nav-text-icon" aria-hidden="true">首</span><span>首页</span></a>
+      <a class="tab-item" href="orders.html"><span class="nav-text-icon" aria-hidden="true">单</span><span>订单</span></a>
+      <a class="tab-item" href="profile.html"><span class="nav-text-icon" aria-hidden="true">我</span><span>我的</span></a>
+    </nav>
+  </div>
+
+  <!-- 公共工具、演示数据、存储封装和本页逻辑 -->
+  <script src="../js/utils.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/train-list.js"></script>
+</body>
+</html>

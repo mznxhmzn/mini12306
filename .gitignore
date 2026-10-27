@@ -1,1 +1,12 @@
 .tmp-report-artifact/
+node_modules/
+server/node_modules/
+server/.env
+.env
+*.log
+.cache/
+.data/
+experiments/.venv/
+experiments/tools/
+experiments/perf/
+experiments/.edge-profile/

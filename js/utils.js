@@ -121,84 +121,29 @@
     return storage ? storage.getData(storage.STORAGE_KEYS.CURRENT_USER, null) : null;
   }
 
-  /** 判断会话是否已超过 30 分钟没有操作 */
+  /** 本地摘要只服务于显示，实际登录状态由服务器验证。 */
   function isLoginExpired(currentUser) {
-    if (!currentUser || !currentUser.lastActiveAt) {
-      return true;
-    }
-
-    const lastActiveTime = new Date(currentUser.lastActiveAt).getTime();
-    return Number.isNaN(lastActiveTime) || Date.now() - lastActiveTime >= SESSION_TIMEOUT;
+    if (!currentUser || !currentUser.lastActiveAt) return true;
+    return Date.now() - Date.parse(currentUser.lastActiveAt) >= SESSION_TIMEOUT;
   }
 
-  /** 更新当前用户最后一次操作时间 */
-  function updateLoginActivity() {
-    const storage = global.Mini12306Storage;
-    const currentUser = getCurrentUser();
-
-    if (!storage || !currentUser || isLoginExpired(currentUser)) {
-      return false;
-    }
-
-    currentUser.lastActiveAt = new Date().toISOString();
-    return storage.setData(storage.STORAGE_KEYS.CURRENT_USER, currentUser);
-  }
-
-  /**
-   * 检查登录状态；未登录或已过期时跳转到登录页。
-   * loginPageUrl 应根据当前页面位置传入，例如 pages/login.html。
-   */
-  function checkLoginStatus(loginPageUrl = "pages/login.html") {
-    const storage = global.Mini12306Storage;
-    const currentUser = getCurrentUser();
-
-    if (!storage || !currentUser) {
-      global.location.replace(loginPageUrl);
-      return false;
-    }
-
-    if (isLoginExpired(currentUser)) {
-      storage.removeData(storage.STORAGE_KEYS.CURRENT_USER);
-      const separator = loginPageUrl.includes("?") ? "&" : "?";
-      global.location.replace(`${loginPageUrl}${separator}reason=expired`);
-      return false;
-    }
-
+  /** 将实际用户活动报告给服务器。 */
+  async function updateLoginActivity() {
+    await global.Mini12306API.request('/auth/activity', {method:'POST'});
     return true;
   }
 
-  /**
-   * 在需要登录的页面启动会话监控。
-   * 用户点击、输入、触摸或滚动时，最多每 15 秒更新一次活动时间。
-   */
-  function startLoginStateMonitor(loginPageUrl = "pages/login.html") {
-    if (sessionMonitorStarted || !checkLoginStatus(loginPageUrl)) {
-      return;
-    }
-
-    sessionMonitorStarted = true;
-    let lastSavedTime = 0;
-
-    const recordActivity = function () {
-      const currentTime = Date.now();
-      if (currentTime - lastSavedTime >= 15000) {
-        updateLoginActivity();
-        lastSavedTime = currentTime;
-      }
-    };
-
-    ["click", "keydown", "touchstart", "scroll"].forEach((eventName) => {
-      document.addEventListener(eventName, recordActivity, { passive: true });
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) {
-        checkLoginStatus(loginPageUrl);
-      }
-    });
-
-    global.setInterval(() => checkLoginStatus(loginPageUrl), 60 * 1000);
+  /** 公共登录检查不再仅相信 LocalStorage。 */
+  async function checkLoginStatus() {
+    try {
+      const {user} = await global.Mini12306API.request('/auth/me', {passive:true});
+      global.Mini12306Storage.setData('currentUser', {...user,lastActiveAt:new Date().toISOString()});
+      return true;
+    } catch (error) { showToast(error.message); return false; }
   }
+
+  /** 登录和空闲监控由 API 与角色保护统一处理。 */
+  function startLoginStateMonitor() { return global.Mini12306RoleGuard.ready; }
 
   global.Mini12306Utils = Object.freeze({
     formatDate,

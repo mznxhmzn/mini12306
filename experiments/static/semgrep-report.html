@@ -1,0 +1,79 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>Semgrep 静态安全扫描报告</title><style>
+  :root { --ink:#14213d; --muted:#5f6b7a; --line:#e3e8ef; --blue:#1a5bc4; --bg:#f5f7fb; --red:#c0392b; --amber:#b26a00; --green:#1e7d4f; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:40px 48px 64px; background:var(--bg); color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; font-size:14px; line-height:1.65; }
+  .page { max-width:1180px; margin:0 auto; }
+  .eyebrow { color:var(--blue); font-weight:600; letter-spacing:.08em; font-size:12px; text-transform:uppercase; }
+  h1 { margin:6px 0 4px; font-size:30px; letter-spacing:-.02em; }
+  .subtitle { color:var(--muted); font-size:15px; }
+  .meta { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:26px 0 20px; }
+  .meta div { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; }
+  .meta span { display:block; font-size:12px; color:var(--muted); }
+  .meta strong { display:block; margin-top:3px; font-size:15px; font-weight:600; }
+  .cmd { background:#0f172a; color:#dbeafe; border-radius:10px; padding:12px 16px; font-family:Consolas,"Courier New",monospace; font-size:12.5px; overflow-wrap:anywhere; margin-bottom:24px; }
+  .cmd b { color:#7dd3fc; font-weight:600; }
+  .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 26px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+  .card span { color:var(--muted); font-size:12.5px; }
+  .card strong { display:block; font-size:30px; line-height:1.2; margin-top:4px; }
+  .card.red strong { color:var(--red); } .card.amber strong { color:var(--amber); } .card.green strong { color:var(--green); }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .panel-head { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .panel-head h2 { margin:0; font-size:16px; }
+  .panel-head span { color:var(--muted); font-size:12.5px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { background:#f8fafc; font-size:12.5px; color:var(--muted); font-weight:600; }
+  tr:last-child td { border-bottom:none; }
+  .badge { display:inline-block; padding:2px 9px; border-radius:999px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .badge.warn { background:#fff4e0; color:#9a5b00; }
+  .badge.error { background:#fdecea; color:#a83226; }
+  .badge.ok { background:#e8f6ee; color:#1e7d4f; }
+  code { background:#f1f5f9; border-radius:5px; padding:1px 6px; font-family:Consolas,"Courier New",monospace; font-size:12.5px; }
+  .rule { font-family:Consolas,"Courier New",monospace; font-size:12px; color:#334155; overflow-wrap:anywhere; }
+  .loc { font-family:Consolas,"Courier New",monospace; font-size:12.5px; white-space:nowrap; }
+  pre { margin:8px 0 0; padding:10px 12px; background:#0f172a; color:#e2e8f0; border-radius:8px; font-family:Consolas,"Courier New",monospace; font-size:12px; line-height:1.55; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .muted { color:var(--muted); }
+  .empty { padding:34px 20px; text-align:center; color:var(--muted); }
+  .empty strong { display:block; color:var(--green); font-size:18px; margin-bottom:6px; }
+  .footer { margin-top:18px; color:var(--muted); font-size:12px; text-align:right; }
+</style></head><body><div class="page">
+    <div class="eyebrow">Mini-12306 · 静态代码审查</div>
+    <h1>Semgrep 静态安全扫描报告</h1><div class="subtitle">基于 Node.js 与 OWASP Top Ten 规则集，对前端脚本和服务端源码进行安全缺陷扫描。</div>
+    <div class="meta"><div><span>工具版本</span><strong>Semgrep 1.182.0</strong></div><div><span>规则集</span><strong>p/nodejs + p/owasp-top-ten</strong></div><div><span>扫描范围</span><strong>32 个文件</strong></div><div><span>运行规则</span><strong>72 条</strong></div></div>
+    <div class="cmd"><b>$</b> semgrep scan --config p/nodejs --config p/owasp-top-ten --metrics=off js server/src</div>
+    <div class="cards">
+    <div class="card amber"><span>全部发现</span><strong>4</strong></div>
+    <div class="card amber"><span>Warning</span><strong>4</strong></div>
+    <div class="card green"><span>Error</span><strong>0</strong></div>
+    <div class="card green"><span>解析错误</span><strong>0</strong></div>
+  </div>
+  <div class="panel"><div class="panel-head"><h2>发现明细</h2><span>按扫描顺序展示</span></div>
+    <table><thead><tr><th>#</th><th>级别</th><th>规则 / 分类</th><th>位置</th><th>说明与代码片段</th></tr></thead><tbody><tr>
+    <td>1</td>
+    <td><span class="badge warn">WARNING</span></td>
+    <td><div class="rule">javascript.browser.security.raw-html-concat.raw-html-concat</div><div class="muted">CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') · A07:2017 - Cross-Site Scripting (XSS)；A03:2021 - Injection；A05:2025 - Injection</div></td>
+    <td><div class="loc">js/booking.js:24</div></td>
+    <td>User controlled data in a HTML string may result in XSS<pre>      main.innerHTML = routeCard({...train, departureDate: date}) + `&lt;section class="section-card form-stack"&gt;&lt;h2&gt;选择乘车人&lt;/h2&gt;&lt;select id="passenger-choice" class="select-control"&gt;&lt;option value=""&gt;${escape(user.realNameMasked)}（本人）&lt;/option&gt;${passengers.map(p =&gt; `&lt;option value="${escape(p.id)}"&gt;${escape(p.nameMasked)} · ${escape(p.idNumberMasked)}&lt;/option&gt;`).joi …</pre></td>
+  </tr><tr>
+    <td>2</td>
+    <td><span class="badge warn">WARNING</span></td>
+    <td><div class="rule">javascript.browser.security.raw-html-concat.raw-html-concat</div><div class="muted">CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') · A07:2017 - Cross-Site Scripting (XSS)；A03:2021 - Injection；A05:2025 - Injection</div></td>
+    <td><div class="loc">js/booking.js:48</div></td>
+    <td>User controlled data in a HTML string may result in XSS<pre>      main.innerHTML = routeCard(order) + `&lt;section class="section-card form-stack"&gt;&lt;h2&gt;模拟支付方式&lt;/h2&gt;&lt;select id="payment-choice" class="select-control"&gt;&lt;option&gt;模拟支付宝&lt;/option&gt;&lt;option&gt;模拟微信支付&lt;/option&gt;&lt;option&gt;模拟银行卡&lt;/option&gt;&lt;/select&gt;&lt;/section&gt;&lt;div class="notice-box"&gt;仅模拟支付，不产生真实扣款。&lt;/div&gt;&lt;button class="primary-button page-submit" type="button"&gt;确认模拟支付 ${money(order.am …</pre></td>
+  </tr><tr>
+    <td>3</td>
+    <td><span class="badge warn">WARNING</span></td>
+    <td><div class="rule">javascript.browser.security.raw-html-concat.raw-html-concat</div><div class="muted">CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') · A07:2017 - Cross-Site Scripting (XSS)；A03:2021 - Injection；A05:2025 - Injection</div></td>
+    <td><div class="loc">js/booking.js:53</div></td>
+    <td>User controlled data in a HTML string may result in XSS<pre>      main.innerHTML = routeCard(order) + `&lt;section class="section-card"&gt;&lt;h2&gt;退款明细&lt;/h2&gt;&lt;div class="price-row"&gt;&lt;span&gt;原票款&lt;/span&gt;&lt;strong&gt;${money(order.amount)}&lt;/strong&gt;&lt;/div&gt;&lt;div class="price-row"&gt;&lt;span&gt;退票手续费（5%）&lt;/span&gt;&lt;strong&gt;-${money(fee)}&lt;/strong&gt;&lt;/div&gt;&lt;div class="price-row price-total"&gt;&lt;span&gt;预计退款&lt;/span&gt;&lt;strong&gt;${money(order.amount - fee)}&lt;/strong&gt;&lt;/div&gt;&lt;/sec …</pre></td>
+  </tr><tr>
+    <td>4</td>
+    <td><span class="badge warn">WARNING</span></td>
+    <td><div class="rule">javascript.browser.security.raw-html-concat.raw-html-concat</div><div class="muted">CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting') · A07:2017 - Cross-Site Scripting (XSS)；A03:2021 - Injection；A05:2025 - Injection</div></td>
+    <td><div class="loc">js/booking.js:57</div></td>
+    <td>User controlled data in a HTML string may result in XSS<pre>      main.innerHTML = routeCard(order) + `&lt;section class="section-card form-stack"&gt;&lt;label for="new-date"&gt;新出发日期&lt;/label&gt;&lt;input id="new-date" class="form-control" type="date" value="${escape(order.departureDate)}"&gt;&lt;label for="new-train"&gt;可选车次及席别&lt;/label&gt;&lt;select id="new-train" class="select-control"&gt;&lt;/select&gt;&lt;p id="difference" class="muted-text"&gt;&lt;/p&gt;&lt;/section&gt;&lt;di …</pre></td>
+  </tr></tbody></table>
+  </div>
+    <div class="footer">报告生成时间：2026/10/21 15:53:39 · 原始结果保存在 experiments/static/</div>
+  </div></body></html>

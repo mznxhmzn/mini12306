@@ -1,0 +1,26 @@
+
+D:\Workspace\mini12306\server\src\seed.js
+  19:12  warning  'phoneMasked' is assigned a value but never used     no-unused-vars
+  19:25  warning  'realNameMasked' is assigned a value but never used  no-unused-vars
+
+D:\Workspace\mini12306\server\src\utils\order-service.js
+  3:60  warning  'RefundRecord' is assigned a value but never used  no-unused-vars
+
+D:\Workspace\mini12306\server\src\utils\serialize.js
+  6:107  warning  '__v' is assigned a value but never used  no-unused-vars
+
+D:\Workspace\mini12306\server\src\utils\validation.js
+   9:12   warning  Generic Object Injection Sink        security/detect-object-injection
+   9:44   warning  Generic Object Injection Sink        security/detect-object-injection
+   9:63   warning  Generic Object Injection Sink        security/detect-object-injection
+  14:123  warning  Generic Object Injection Sink        security/detect-object-injection
+  14:144  warning  Generic Object Injection Sink        security/detect-object-injection
+  14:159  warning  Generic Object Injection Sink        security/detect-object-injection
+  17:59   warning  Generic Object Injection Sink        security/detect-object-injection
+  17:75   warning  Generic Object Injection Sink        security/detect-object-injection
+  17:90   warning  Generic Object Injection Sink        security/detect-object-injection
+  17:121  warning  Generic Object Injection Sink        security/detect-object-injection
+  17:184  warning  Function Call Object Injection Sink  security/detect-object-injection
+
+✖ 15 problems (0 errors, 15 warnings)
+

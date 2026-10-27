@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>用户管理 - Mini-12306</title><link rel="stylesheet" href="../../css/common.css"><link rel="stylesheet" href="../../css/pages.css"><link rel="stylesheet" href="../../css/admin.css"></head>
+<body data-role="admin"><div class="app-shell business-shell admin-shell">
+<!-- 角色专属界面沿用蓝色标题与圆角卡片 -->
+<header class="subpage-header"><a href="dashboard.html" class="header-action">‹</a><h1>用户管理</h1><button type="button" class="header-action" data-action="logout">退出</button></header>
+<main class="subpage-content"><section class="section-card"><h2>用户列表</h2><div id="admin-users" class="admin-list"></div></section><form id="create-user" class="section-card form-stack"><h2>创建账号</h2><label for="account">账号</label><input id="account" type="text" class="form-control" required><label for="phone">手机号</label><input id="phone" type="tel" class="form-control" required><label for="realName">姓名</label><input id="realName" type="text" class="form-control" required><label for="password">初始密码</label><input id="password" type="password" class="form-control" required><label for="role">角色</label><select id="role" class="select-control"><option value="passenger">旅客</option><option value="clerk">售票员</option><option value="admin">管理员</option></select><button type="submit" class="primary-button">创建账号</button></form></main><nav class="tab-bar" aria-label="角色导航"></nav></div>
+<script src="../../js/storage.js"></script><script src="../../js/utils.js"></script><script src="../../js/api.js"></script><script src="../../js/role-guard.js"></script><script src="../../js/management.js"></script>
+</body></html>

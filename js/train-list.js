@@ -6,12 +6,12 @@
   let currentSort = "departure";
   let matchedTrains = [];
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const storage = global.Mini12306Storage;
     const utils = global.Mini12306Utils;
 
     /* 车次列表属于受保护页面 */
-    utils.startLoginStateMonitor("login.html");
+    if (!await global.Mini12306RoleGuard.ready) return;
 
     const searchCondition = storage.getData(storage.STORAGE_KEYS.TRAIN_SEARCH, null);
     if (!searchCondition) {
@@ -22,16 +22,11 @@
 
     renderSearchSummary(searchCondition);
 
-    /* 车次数据由 mock-data.js 初始化，再通过统一存储接口读取 */
-    const allTrains = storage.getData(storage.STORAGE_KEYS.TRAINS, []);
-    matchedTrains = allTrains.filter((train) => {
-      const sameRoute = train.departureCity === searchCondition.departureCity
-        && train.arrivalCity === searchCondition.arrivalCity;
-      const runsOnDate = Array.isArray(train.operatingDates)
-        && train.operatingDates.includes(searchCondition.departureDate);
-      return sameRoute && runsOnDate;
-    });
-
+    try {
+      const query = new URLSearchParams({from: searchCondition.departureCity, to: searchCondition.arrivalCity, date: searchCondition.departureDate});
+      const result = await global.Mini12306API.request('/trains?' + query);
+      matchedTrains = result.trains;
+    } catch (error) { utils.showToast(error.message); }
     bindFilterEvents();
     bindSortEvent();
     renderTrainList();
@@ -156,8 +151,9 @@
     actionButton.textContent = soldOut ? "无票" : "选择车次";
     if (!soldOut) {
       actionButton.addEventListener("click", () => {
-        /* 当前订单确认页使用静态演示内容，后续再保存所选车次 */
-        global.location.href = "order-confirm.html";
+        /* 通过地址传递所选车次，订单确认页重新向服务端核对票价。 */
+        const search = global.Mini12306Storage.getData('trainSearch');
+        global.location.href = 'order-confirm.html?' + new URLSearchParams({trainId: train.id, date: search.departureDate, from: search.departureCity, to: search.arrivalCity});
       });
     }
 

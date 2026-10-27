@@ -2,7 +2,7 @@
 (function (global) {
   "use strict";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const storage = global.Mini12306Storage;
     const utils = global.Mini12306Utils;
     const searchForm = document.querySelector("#ticket-search-form");
@@ -15,7 +15,8 @@
     const loginPageUrl = inPagesDirectory ? "login.html" : "pages/login.html";
 
     /* 首页是受保护页面，未登录或 30 分钟无操作时返回登录页 */
-    utils.startLoginStateMonitor(loginPageUrl);
+    const verifiedUser = await global.Mini12306RoleGuard.ready;
+    if (!verifiedUser) return;
 
     const currentUser = utils.getCurrentUser();
     /* 旅客共用购票页面模板，但显示各自的脱敏姓名 */
@@ -28,6 +29,17 @@
       console.error("首页查询初始化失败：缺少必要的页面元素或公共脚本");
       return;
     }
+
+    /* 城市列表来自 API，点击后弹出原生选择输入。 */
+    try {
+      const {stations} = await global.Mini12306API.request('/trains/stations');
+      [departureButton, arrivalButton].forEach(button => button.addEventListener('click', () => {
+        const city = prompt('请输入城市或车站：' + stations.join('、'), button.dataset.city);
+        if (city === null) return;
+        if (!stations.includes(city.trim())) return utils.showToast('请选择列表中的城市或车站');
+        button.dataset.city = city.trim(); button.querySelector('.city-name').textContent = city.trim();
+      }));
+    } catch (error) { utils.showToast(error.message); }
 
     /* 日期默认选中明天，并禁止选择今天以前的日期 */
     const today = utils.formatDate(new Date());

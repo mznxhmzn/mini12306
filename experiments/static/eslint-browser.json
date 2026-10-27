@@ -1,0 +1,30 @@
+{
+  "root": true,
+  "env": { "browser": true, "es2022": true },
+  "parserOptions": { "ecmaVersion": 2022, "sourceType": "script" },
+  "extends": ["eslint:recommended"],
+  "plugins": ["security"],
+  "globals": {
+    "Mini12306Utils": "readonly",
+    "Mini12306Storage": "readonly",
+    "Mini12306API": "readonly",
+    "Mini12306RoleGuard": "readonly",
+    "Mini12306MockData": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "args": "none" }],
+    "security/detect-object-injection": "warn",
+    "security/detect-possible-timing-attacks": "warn",
+    "security/detect-non-literal-regexp": "warn",
+    "security/detect-non-literal-fs-filename": "off",
+    "security/detect-non-literal-require": "warn",
+    "security/detect-unsafe-regex": "error",
+    "security/detect-eval-with-expression": "error",
+    "security/detect-child-process": "error",
+    "security/detect-new-buffer": "error",
+    "security/detect-buffer-noassert": "error",
+    "security/detect-disable-mustache-escape": "error",
+    "security/detect-no-csrf-before-method-override": "error",
+    "security/detect-pseudoRandomBytes": "error"
+  }
+}

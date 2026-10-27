@@ -1,0 +1,7 @@
+{
+  "name": "mini12306-server", "version": "2.0.0", "private": true,
+  "engines": {"node": ">=20"},
+  "scripts": {"dev": "node --watch src/index.js", "start": "node src/index.js", "seed": "node src/seed.js", "test": "node --test test/*.test.js test/integration/*.test.js", "test:integration": "node --test test/integration/*.test.js"},
+  "dependencies": {"bcryptjs": "^2.4.3", "cors": "^2.8.5", "dotenv": "^16.4.7", "express": "^4.21.2", "jsonwebtoken": "^9.0.2", "mongoose": "^8.19.0"},
+  "devDependencies": {"mongodb-memory-server": "^10.2.0"}
+}

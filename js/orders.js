@@ -6,22 +6,23 @@
     pending: { label: "待支付", className: "status-pending" },
     paid: { label: "已支付", className: "status-paid" },
     refunded: { label: "已退票", className: "status-refunded" },
+    cancelled: { label: "已取消", className: "status-refunded" },
     changed: { label: "已改签", className: "status-changed" }
   };
 
   let currentFilter = "all";
   let personalOrders = [];
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     const storage = global.Mini12306Storage;
-    const currentUser = global.Mini12306Utils.getCurrentUser();
+    const currentUser = await global.Mini12306RoleGuard.ready;
     if (!storage || !currentUser) {
       return;
     }
 
     /* 只读取当前旅客自己的订单 */
-    personalOrders = storage.getData(storage.STORAGE_KEYS.ORDERS, [])
-      .filter((order) => order.userId === currentUser.id);
+    try { personalOrders = (await global.Mini12306API.request('/orders')).orders; }
+    catch (error) { global.Mini12306Utils.showToast(error.message); return; }
 
     document.querySelectorAll(".order-filter-button").forEach((button) => {
       button.addEventListener("click", () => {
@@ -94,7 +95,7 @@
     meta.append(passenger, ticket);
 
     card.append(header, route, meta);
-    const actions = createOrderActions(order.status);
+    const actions = createOrderActions(order);
     if (actions.childElementCount > 0) {
       card.appendChild(actions);
     }
@@ -123,16 +124,18 @@
   }
 
   /** 根据订单状态提供对应操作 */
-  function createOrderActions(status) {
+  function createOrderActions(order) {
+    const status = order.status;
+    const query = "?id=" + encodeURIComponent(order.id);
     const actions = document.createElement("footer");
     actions.className = "order-actions";
 
     if (status === "paid") {
-      actions.append(createActionLink("退票", "refund.html"), createActionLink("改签", "reschedule.html", true));
+      actions.append(createActionLink("退票", "refund.html" + query), createActionLink("改签", "reschedule.html" + query, true));
     } else if (status === "pending") {
-      actions.append(createActionButton("取消订单"), createActionLink("继续支付", "payment.html", true));
+      actions.append(createActionButton("取消订单", async () => { if (!confirm("确认取消订单？")) return; try { await global.Mini12306API.request("/orders/" + encodeURIComponent(order.id) + "/cancel", {method:"POST"}); location.reload(); } catch (error) { global.Mini12306Utils.showToast(error.message); } }), createActionLink("继续支付", "payment.html" + query, true));
     } else {
-      actions.append(createActionButton("查看详情"));
+      actions.append(createActionButton("查看详情", () => global.Mini12306Utils.showToast("订单号：" + order.orderNumber)));
     }
 
     return actions;
@@ -146,11 +149,12 @@
     return link;
   }
 
-  function createActionButton(label) {
+  function createActionButton(label, handler) {
     const button = document.createElement("button");
     button.className = "small-button";
     button.type = "button";
     button.textContent = label;
+    if (handler) button.addEventListener("click", handler);
     return button;
   }
 

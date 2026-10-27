@@ -1,0 +1,13 @@
+/* 管理端沿用原有蓝色、圆角卡片与移动优先布局。 */
+.admin-list { display: grid; gap: 16px; }
+.admin-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
+.admin-card { display: grid; gap: 10px; }
+.admin-card .small-button { display: inline-flex; align-items: center; justify-content: center; }
+.seat-row { display: grid; grid-template-columns: 1.3fr 1fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 10px; }
+.seat-row input { min-width: 0; width: 100%; }
+.date-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.date-tag { background: #eaf1ff; color: #1A5BC4; border-radius: 16px; padding: 6px 10px; }
+.date-tag button { border: 0; background: transparent; color: inherit; margin-left: 8px; cursor: pointer; }
+.admin-message { color: #1A5BC4; min-height: 24px; }
+.admin-shell { max-width: 1000px; }
+@media (max-width: 480px) { .seat-row { grid-template-columns: 1fr 1fr; padding: 12px 0; border-bottom: 1px solid #e1e7ef; } }

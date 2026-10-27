@@ -1,0 +1,39 @@
+
+D:\Workspace\mini12306\js\booking.js
+  10:81   warning  Generic Object Injection Sink                    security/detect-object-injection
+  24:640  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  24:658  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  61:7    error    Move function declaration to function body root  no-inner-declarations
+
+D:\Workspace\mini12306\js\home.js
+  15:11  warning  'loginPageUrl' is assigned a value but never used  no-unused-vars
+
+D:\Workspace\mini12306\js\management.js
+  16:78   error    Irregular whitespace not allowed                 no-irregular-whitespace
+  16:107  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  16:128  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  16:151  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  16:167  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  36:7    error    Move function declaration to function body root  no-inner-declarations
+  39:110  warning  Generic Object Injection Sink                    security/detect-object-injection
+  40:44   warning  Function Call Object Injection Sink              security/detect-object-injection
+  46:7    error    Move function declaration to function body root  no-inner-declarations
+  52:74   warning  Generic Object Injection Sink                    security/detect-object-injection
+  62:50   warning  Generic Object Injection Sink                    security/detect-object-injection
+  73:107  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  73:155  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  73:175  error    Irregular whitespace not allowed                 no-irregular-whitespace
+  79:94   warning  Generic Object Injection Sink                    security/detect-object-injection
+
+D:\Workspace\mini12306\js\orders.js
+  92:69  error  Irregular whitespace not allowed  no-irregular-whitespace
+  94:44  error  Irregular whitespace not allowed  no-irregular-whitespace
+
+D:\Workspace\mini12306\js\role-guard.js
+  5:24  warning  Generic Object Injection Sink  security/detect-object-injection
+
+D:\Workspace\mini12306\js\utils.js
+  9:7  warning  'sessionMonitorStarted' is assigned a value but never used  no-unused-vars
+
+✖ 24 problems (15 errors, 9 warnings)
+

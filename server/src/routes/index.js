@@ -5,27 +5,38 @@ const { authController } = require('../controllers/auth');
 const trains = require('../controllers/trains');
 const orders = require('../controllers/orders');
 const admin = require('../controllers/admin');
+const passengers = require('../controllers/passengers');
+const security=require('../controllers/account-security');
+const {stats}=require('../controllers/stats');
 function routes(config) {
   const router = Router();
   const auth = authController(config);
   // 登录、旅客注册是公开入口，其余接口均由认证及角色中间件保护。
   router.post('/auth/register', asyncHandler(auth.register));
   router.post('/auth/login', asyncHandler(auth.login));
+  // 公开身份核验入口；处理器仍强制目标角色为 passenger。
+  router.post('/auth/reset-password',asyncHandler(security.resetPassword));
   router.use(authenticate(config));
   const everyone = requireRole('passenger', 'clerk', 'admin');
   const passenger = requireRole('passenger');
   const administrator = requireRole('admin');
   router.get('/auth/me', everyone, auth.me);
   router.post('/auth/activity', everyone, (req, res) => res.json({ok: true}));
+  router.post('/auth/change-password',everyone,asyncHandler(security.changePassword));
+  router.post('/auth/logout',everyone,asyncHandler(security.logout));
   router.get('/trains/stations', everyone, asyncHandler(trains.stations));
   router.get('/trains', everyone, asyncHandler(trains.list));
   router.get('/passengers', passenger, asyncHandler(orders.passengers));
+  router.post('/passengers', passenger, asyncHandler(passengers.save));
+  router.put('/passengers/:id', passenger, asyncHandler(passengers.save));
+  router.delete('/passengers/:id', passenger, asyncHandler(passengers.remove));
   router.get('/orders/all', administrator, asyncHandler(orders.all));
   router.get('/orders', passenger, asyncHandler(orders.list));
   router.post('/orders', passenger, asyncHandler(orders.create));
   router.get('/orders/:id', passenger, asyncHandler(orders.detail));
   router.post('/orders/:id/pay', passenger, asyncHandler(orders.pay));
   router.post('/orders/:id/refund', passenger, asyncHandler(orders.refund));
+  router.get('/orders/:id/refund-quote', passenger, asyncHandler(orders.quote));
   router.post('/orders/:id/cancel', passenger, asyncHandler(orders.cancel));
   router.post('/orders/:id/reschedule', passenger, asyncHandler(orders.reschedule));
   router.get('/admin/trains', administrator, asyncHandler(admin.listTrains));
@@ -34,6 +45,7 @@ function routes(config) {
   router.put('/admin/trains/:id', administrator, asyncHandler(admin.updateTrain));
   router.delete('/admin/trains/:id', administrator, asyncHandler(admin.deleteTrain));
   router.get('/admin/users', administrator, asyncHandler(admin.listUsers));
+  router.get('/admin/stats',administrator,asyncHandler(stats));
   router.post('/admin/users', administrator, asyncHandler(admin.createUser));
   router.patch('/admin/users/:id/role', administrator, asyncHandler(admin.changeRole));
   router.post('/clerk/orders/issue', requireRole('clerk'), asyncHandler(orders.issue));

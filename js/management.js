@@ -10,11 +10,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const dashboard = document.querySelector('#dashboard-stats');
     if (dashboard) {
-      const [{trains}, {users}, {orders}] = await Promise.all([api.request('/admin/trains'), api.request('/admin/users'), api.request('/orders/all')]);
-      dashboard.textContent = `${trains.length} 条车次 · ${users.length} 个用户 · ${orders.length} 笔订单`;
+      const [{trains}, {users}, orderPage] = await Promise.all([api.request('/admin/trains'), api.request('/admin/users'), api.request('/orders/all')]);
+      const orders=orderPage.orders;
+      dashboard.textContent = `${trains.length} 条车次 · ${users.length} 个用户 · ${orderPage.total} 笔订单`;
       const list = document.querySelector('#all-orders');
       for (const order of orders) list.append(node('p', `${order.orderNumber}　${order.passengerNameMasked}　${order.trainNumber}　${order.departureDate}　${order.status}　${Mini12306Utils.formatCurrency(order.amount)}`));
       if (!orders.length) list.textContent = '暂无订单';
+      let orderPageNumber=1;
+      const more=node('button','加载更多','secondary-button');more.type='button';list.after(more);more.hidden=!orderPage.hasMore;
+      more.onclick=async()=>{more.disabled=true;try{const result=await api.request('/orders/all?'+new URLSearchParams({page:orderPageNumber+1,limit:20}));for(const order of result.orders)list.append(node('p',order.orderNumber+'　'+order.passengerNameMasked+'　'+order.trainNumber+'　'+order.status));orderPageNumber=result.page;more.hidden=!result.hasMore;}catch(error){toast(error.message);}finally{more.disabled=false;}};
     }
     const trainList = document.querySelector('#admin-trains');
     if (trainList) {

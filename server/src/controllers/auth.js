@@ -18,7 +18,7 @@ function authController(config) {
     let user;
     await mongoose.connection.transaction(async session => {
       [user] = await User.create([{account: valid.text(req.body.account || phone, '账号', 40), phone, passwordHash, realName, idNumber, role: 'passenger', verified: false}], {session});
-      await Passenger.create([{ownerUserId: user._id, nameMasked: maskName(realName), idType: '居民身份证', idNumberMasked: maskId(idNumber), passengerType: '成人'}], {session});
+      await Passenger.create([{ownerUserId: user._id, name: realName, idType: '居民身份证', idNumber, passengerType: '成人'}], {session});
     });
     res.status(201).json({user: safeUser(user)});
   }

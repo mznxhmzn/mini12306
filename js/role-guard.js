@@ -4,7 +4,7 @@
   const storage = global.Mini12306Storage;
   const home = role => ({passenger: 'index.html', clerk: 'pages/clerk/dashboard.html', admin: 'pages/admin/dashboard.html'})[role] || 'pages/login.html';
   const currentPath = new URL(location.href).pathname;
-  const publicPage = /\/(login|register)\.html$/.test(currentPath);
+  const publicPage = /\/(login|register|forgot-password)\.html$/.test(currentPath);
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
   async function guard() {

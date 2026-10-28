@@ -4,4 +4,5 @@ const maskId = value => value ? `${String(value).slice(0, 6)}********${String(va
 const maskName = value => value ? value.length === 1 ? '*' : `${value[0]}*${value.length > 2 ? value.slice(-1) : ''}` : '';
 function safeUser(user) { return { id: user._id, account: user.account, role: user.role, status: user.status, realNameMasked: maskName(user.realName), phoneMasked: maskPhone(user.phone), idNumberMasked: maskId(user.idNumber), verified: user.verified, createdAt: user.createdAt }; }
 function plain(document) { const value = document.toObject ? document.toObject() : document; const { _id, __v, ...rest } = value; return { ...rest, id: _id }; }
-module.exports = { maskPhone, maskId, maskName, safeUser, plain };
+function safePassenger(p) { return {id:p._id,ownerUserId:p.ownerUserId,nameMasked:p.name?maskName(p.name):p.nameMasked,idType:p.idType,idNumberMasked:p.idNumber?maskId(p.idNumber):p.idNumberMasked,passengerType:p.passengerType,createdAt:p.createdAt,updatedAt:p.updatedAt}; }
+module.exports = { maskPhone, maskId, maskName, safeUser, safePassenger, plain };

@@ -12,8 +12,9 @@ const jwt = require('jsonwebtoken');
 const {initializeModels} = require('../../src/utils/initialize-models');
 const {invalidateStationCache} = require('../../src/utils/station-cache');
 let replica, server, base, hash;
-const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0,10);
-const afterTomorrow = new Date(Date.now() + 2 * 86400000).toISOString().slice(0,10);
+// 基础退款回归使用三天后车次保持5%档，精确费率边界另有独立测试。
+const tomorrow = new Date(Date.now() + 3 * 86400000).toISOString().slice(0,10);
+const afterTomorrow = new Date(Date.now() + 4 * 86400000).toISOString().slice(0,10);
 const trainData = {_id:'T1', trainNumber:'G66', trainType:'高速动车', departureCity:'武汉', arrivalCity:'北京', departureStation:'武汉', arrivalStation:'北京南', departureTime:'07:38', arrivalTime:'11:30', durationMinutes:232, bookable:true, operatingDates:[tomorrow,afterTomorrow], stops:['武汉','北京南'], seats:[{seatType:'二等座', price:520.5, remaining:2}]};
 before(async () => {
   // 使用独立、真实的 Mongo 单节点副本集，不接触开发数据库。

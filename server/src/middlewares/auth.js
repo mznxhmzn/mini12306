@@ -17,6 +17,7 @@ function authenticate(config) {
       : await Session.findOne(filter);
     if (!session) throw new HttpError(401, '登录已失效，请重新登录');
     req.user = user;
+    req.sessionId = payload.jti;
     next();
   });
 }

@@ -5,7 +5,8 @@
   const storage = global.Mini12306Storage;
   let lastActivity = Date.now();
   function page(path) { return new URL(path, projectUrl).href; }
-  function logout() { storage.clearSession(); location.replace(page('pages/login.html')); }
+  function clearLogin(){storage.clearSession();location.replace(page('pages/login.html'));}
+  async function logout(){try{if(storage.getData('token'))await request('/auth/logout',{method:'POST',passive:true});}catch(error){global.Mini12306Utils?.showToast(error.message);}finally{clearLogin();}}
   async function request(path, options = {}) {
     const headers = {'Content-Type': 'application/json', ...options.headers};
     const token = storage.getData('token');
@@ -16,7 +17,7 @@
     catch { throw new Error('无法连接服务器，请确认 API 已启动'); }
     const data = response.status === 204 ? {} : await response.json();
     if (!response.ok) {
-      if (response.status === 401 && !path.startsWith('/auth/login') && !path.startsWith('/auth/register')) logout();
+      if (response.status === 401 && !path.startsWith('/auth/login') && !path.startsWith('/auth/register') && !path.startsWith('/auth/reset-password')) clearLogin();
       const error = new Error(data.error?.message || '请求失败'); error.status = response.status; throw error;
     }
     return data;
@@ -28,7 +29,7 @@
   let lastReported = 0;
   for (const event of ['click', 'keydown', 'touchstart', 'scroll']) document.addEventListener(event, () => {
     lastActivity = Date.now();
-    if (!/\/(login|register)\.html$/.test(location.pathname) && storage.getData('token') && lastActivity - lastReported > 15000) {
+    if (!/\/(login|register|forgot-password)\.html$/.test(location.pathname) && storage.getData('token') && lastActivity - lastReported > 15000) {
       lastReported = lastActivity;
       request('/auth/activity', {method: 'POST'}).catch(error => global.Mini12306Utils?.showToast(error.message));
     }

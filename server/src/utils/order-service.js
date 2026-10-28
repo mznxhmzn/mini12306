@@ -3,7 +3,8 @@ const { randomUUID } = require('node:crypto');
 const { Train, Order, Inventory, Passenger, PaymentRecord, RefundRecord } = require('../models');
 const { assert } = require('./errors');
 const valid = require('./validation');
-const { maskName } = require('./serialize');
+const { maskName, maskId, safePassenger } = require('./serialize');
+const {assignSeat}=require('./seat-allocation');
 async function allocate(user, body, session, extra = {}) {
   const departureDate = valid.date(body.departureDate);
   assert(departureDate >= new Date().toLocaleDateString('en-CA', {timeZone: 'Asia/Shanghai'}), 400, '不能购买过去日期的车票');
@@ -22,7 +23,7 @@ async function allocate(user, body, session, extra = {}) {
     passenger = await Passenger.findOne({_id: valid.text(body.passengerId, '乘车人编号'), ownerUserId: user._id}).session(session);
     assert(passenger, 403, '不能使用他人的乘车人资料');
   }
-  const [order] = await Order.create([{orderNumber: `E${Date.now()}${randomUUID().slice(0, 8)}`, userId: user._id, passengerId: passenger?._id, passengerNameMasked: passenger?.nameMasked || maskName(user.realName), trainId, trainNumber: train.trainNumber, departureCity: train.departureCity, arrivalCity: train.arrivalCity, departureStation: train.departureStation, arrivalStation: train.arrivalStation, departureDate, departureTime: train.departureTime, arrivalTime: train.arrivalTime, seatType, amount: seat.price, expiresAt: new Date(Date.now() + 15 * 60000), ...extra}], {session});
+  const [order] = await Order.create([{orderNumber: `E${Date.now()}${randomUUID().slice(0, 8)}`, userId: user._id, passengerId: passenger?._id, passengerNameMasked: (passenger ? safePassenger(passenger).nameMasked : maskName(user.realName)), passengerIdType:passenger?.idType || '居民身份证', passengerIdNumberMasked:passenger ? safePassenger(passenger).idNumberMasked : maskId(user.idNumber), trainId, trainNumber: train.trainNumber, departureCity: train.departureCity, arrivalCity: train.arrivalCity, departureStation: train.departureStation, arrivalStation: train.arrivalStation, departureDate, departureTime: train.departureTime, arrivalTime: train.arrivalTime, seatType, amount: seat.price, expiresAt: new Date(Date.now() + 15 * 60000), ...extra}], {session});
   return order;
 }
 async function release(order, session) {
@@ -36,7 +37,10 @@ async function createOrder(user, body, issuedBy) {
       result = await Order.findOne({userId: user._id, requestId}).session(session);
       if (result) return;
       result = await allocate(user, body, session, {requestId, issuedBy, status: issuedBy ? 'paid' : 'pending'});
-      if (issuedBy) await PaymentRecord.create([{orderId: result._id, userId: user._id, amount: result.amount, method: '柜台模拟出票', status: 'success'}], {session});
+      if (issuedBy) {
+        await assignSeat(result,session);await result.save({session});
+        await PaymentRecord.create([{orderId: result._id, userId: user._id, amount: result.amount, method: '柜台模拟出票', status: 'success'}], {session});
+      }
     });
   } catch (error) {
     // 同一个请求并发重试返回原订单，既不重复扣票也不返回无关订单。
@@ -57,7 +61,7 @@ function expireOrders() {
 async function runExpiration() {
   const expired = await Order.find({status: 'pending', expiresAt: {$lte: new Date()}}).select('_id');
   for (const old of expired) await mongoose.connection.transaction(async session => {
-    const order = await Order.findOneAndUpdate({_id: old._id, status: 'pending', expiresAt: {$lte: new Date()}}, {$set: {status: 'cancelled'}}, {new: true, session});
+    const order = await Order.findOneAndUpdate({_id: old._id, status: 'pending', expiresAt: {$lte: new Date()}}, {$set: {status: 'cancelled',cancelReason:'timeout',cancelledAt:new Date()}}, {new: true, session});
     if (order) await release(order, session);
   });
 }

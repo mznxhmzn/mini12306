@@ -11,7 +11,8 @@
   };
 
   let currentFilter = "all";
-  let personalOrders = [];
+  let personalOrders = [], page = 0, generation = 0;
+  let more;
 
   document.addEventListener("DOMContentLoaded", async () => {
     const storage = global.Mini12306Storage;
@@ -20,9 +21,9 @@
       return;
     }
 
-    /* 只读取当前旅客自己的订单 */
-    try { personalOrders = (await global.Mini12306API.request('/orders')).orders; }
-    catch (error) { global.Mini12306Utils.showToast(error.message); return; }
+    more = document.createElement('button');more.className='secondary-button';more.type='button';more.textContent='加载更多';document.querySelector('#order-list').after(more);
+    more.onclick=()=>load(false);
+    await load(true);
 
     document.querySelectorAll(".order-filter-button").forEach((button) => {
       button.addEventListener("click", () => {
@@ -30,12 +31,27 @@
         document.querySelectorAll(".order-filter-button").forEach((item) => {
           item.classList.toggle("is-active", item === button);
         });
-        renderOrders();
+        load(true);
       });
     });
 
     renderOrders();
   });
+
+  /** 分页由服务器执行，旧筛选的响应不能覆盖新筛选。 */
+  async function load(reset) {
+    const ticket=reset?++generation:generation, nextPage=reset?1:page+1;
+    more.disabled=true;
+    try {
+      const query=new URLSearchParams({page:nextPage,limit:20});
+      if(currentFilter!=='all')query.set('status',currentFilter);
+      const result=await global.Mini12306API.request('/orders?'+query);
+      if(ticket!==generation)return;
+      personalOrders=reset?result.orders:personalOrders.concat(result.orders);
+      page=result.page;renderOrders();more.hidden=!result.hasMore;
+    }catch(error){global.Mini12306Utils.showToast(error.message);}
+    finally{if(ticket===generation)more.disabled=false;}
+  }
 
   /** 根据当前筛选条件渲染个人订单 */
   function renderOrders() {
@@ -92,6 +108,7 @@
     passenger.textContent = `${formatShortDate(order.departureDate)}　${order.passengerNameMasked}`;
     const ticket = document.createElement("strong");
     ticket.textContent = `${order.seatType}　${global.Mini12306Utils.formatCurrency(order.amount)}`;
+    ticket.textContent += order.carNumber && order.seatNumber ? `　${order.carNumber}车${order.seatNumber}座` : '　待分配';
     meta.append(passenger, ticket);
 
     card.append(header, route, meta);

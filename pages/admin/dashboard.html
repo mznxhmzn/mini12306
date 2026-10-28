@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>管理工作台 - Mini-12306</title><link rel="stylesheet" href="../../css/common.css"><link rel="stylesheet" href="../../css/pages.css"><link rel="stylesheet" href="../../css/admin.css"></head>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>管理工作台 - Mini-12306</title><link rel="stylesheet" href="../../css/common.css"><link rel="stylesheet" href="../../css/pages.css"><link rel="stylesheet" href="../../css/admin.css"><link rel="stylesheet" href="../../css/features.css"></head>
 <body data-role="admin"><div class="app-shell business-shell admin-shell">
 <!-- 角色专属界面沿用蓝色标题与圆角卡片 -->
 <header class="subpage-header"><a href="dashboard.html" class="header-action">‹</a><h1>管理工作台</h1><button type="button" class="header-action" data-action="logout">退出</button></header>
-<main class="subpage-content"><section class="section-card"><h2>管理员工作台</h2><p data-current-user-name></p><p id="dashboard-stats">正在加载统计…</p></section><section class="section-card menu-list"><a class="menu-item" href="trains.html">车次管理 ›</a><a class="menu-item" href="users.html">用户管理 ›</a></section><section class="section-card"><h2>全部订单</h2><div id="all-orders"></div></section></main><nav class="tab-bar" aria-label="角色导航"></nav></div>
+<main class="subpage-content"><section class="section-card"><h2>管理员工作台</h2><p data-current-user-name></p><p id="dashboard-stats">正在加载统计…</p></section><section class="section-card menu-list"><a class="menu-item" href="trains.html">车次管理 ›</a><a class="menu-item" href="users.html">用户管理 ›</a></section><!-- 只读统计按北京时间筛选，不触发订单清理或资金变动 -->
+<section class="section-card"><h2>经营统计</h2>
+<div class="admin-toolbar"><label for="stats-date">统计日期</label><input class="form-control" id="stats-date" type="date"><button class="small-button" id="stats-refresh" type="button">刷新</button></div>
+<p id="stats-message" role="status">正在加载统计…</p><div class="stats-grid" id="stats-cards"></div>
+<p class="stats-note">订单按创建日统计；票款与退款按成功流水发生日统计（包含改签补退差）；销量仅统计所选日创建且当前已支付的有效车票。历史未记录取消原因的订单不推测为超时清理。</p>
+<div class="stats-charts"><section><h3>车次销量 Top5</h3><div id="top-trains"></div></section><section><h3>线路销量 Top5</h3><div id="top-routes"></div></section></div></section><section class="section-card"><h2>全部订单</h2><div id="all-orders"></div></section></main><nav class="tab-bar" aria-label="角色导航"></nav></div>
 <script src="../../js/storage.js"></script><script src="../../js/utils.js"></script><script src="../../js/api.js"></script><script src="../../js/role-guard.js"></script><script src="../../js/management.js"></script>
+<script src="../../js/admin-stats.js"></script>
 </body></html>
